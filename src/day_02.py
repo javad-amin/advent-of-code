@@ -33,7 +33,7 @@ def sum_of_powers_minimum_to_pass(games_parsed: list[list[dict[str, int]]]) -> i
     )
 
 
-def parse_games_data(lines):
+def parse_games_data(lines: list[str]) -> list[list[dict[str, int]]]:
     games_data = [line.strip().split(":")[1] for line in lines]
     games_rounds = [round.strip().split(";") for round in games_data]
 

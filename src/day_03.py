@@ -6,8 +6,8 @@ INPUT_PATH = os.path.join(PROJECT_PATH, "src", "input", "day_03.txt")
 DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
 
 
-def find_number_and_y_indices(line, y):
-    def expand_in_direction(start, step):
+def find_number_and_y_indices(line: list[str], y: int) -> tuple[str, list[int]]:
+    def expand_in_direction(start: int, step: int) -> tuple[str, list[int]]:
         part_number = ""
         indices = []
         while 0 <= start < len(line) and line[start].isdigit():

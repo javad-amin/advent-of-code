@@ -5,7 +5,9 @@ PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INPUT_PATH = os.path.join(PROJECT_PATH, "src", "input", "day_08.txt")
 
 
-def navigate_desert_lcm(instructions, positions):
+def navigate_desert_lcm(
+    instructions: list[str], positions: dict[str, tuple[str, ...]]
+) -> int:
     start_positions = [position for position in positions if position.endswith("A")]
     lcm = 1
 
@@ -25,7 +27,9 @@ def navigate_desert_lcm(instructions, positions):
     return lcm
 
 
-def navigate_desert(instructions, positions):
+def navigate_desert(
+    instructions: list[str], positions: dict[str, tuple[str, ...]]
+) -> int:
     current_position = "AAA"
     steps = 0
     instruction_index = 0
@@ -41,14 +45,15 @@ def navigate_desert(instructions, positions):
     return steps
 
 
-def parse_file(lines):
+def parse_file(lines: list[str]) -> tuple[list[str], dict[str, tuple[str, ...]]]:
     instructions = list(lines[0])
     position_map = {}
 
     for line in lines[2:]:
         current_position, left_right_positions = line.split(" = ")
-        left_right_positions = left_right_positions.strip("()").split(", ")
-        position_map[current_position] = tuple(left_right_positions)
+        position_map[current_position] = tuple(
+            left_right_positions.strip("()").split(", ")
+        )
     return instructions, position_map
 
 

@@ -1,15 +1,17 @@
 import os
 
-PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INPUT_PATH = os.path.join(PROJECT_PATH, "src", "input", "day_05.txt")
+PROJECT_PATH: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+INPUT_PATH: str = os.path.join(PROJECT_PATH, "src", "input", "day_05.txt")
 
 
-def map_ranges(current_ranges, range_mappings):
-    mapped_ranges = []
+def map_ranges(
+    current_ranges: list[tuple[int, int]], range_mappings: list[tuple[int, int, int]]
+) -> list[tuple[int, int]]:
+    mapped_ranges: list[tuple[int, int]] = []
 
     for destination, source, size in range_mappings:
         source_end = source + size
-        temporary_ranges = []
+        temporary_ranges: list[tuple[int, int]] = []
 
         while current_ranges:
             start, end = current_ranges.pop()
@@ -34,19 +36,21 @@ def map_ranges(current_ranges, range_mappings):
     return mapped_ranges + current_ranges
 
 
-def map_value(val, range_mappings):
+def map_value(val: int, range_mappings: list[tuple[int, int, int]]) -> int:
     for destination, source, size in range_mappings:
         if source <= val < source + size:
             return destination + (val - source)
     return val
 
 
-def map_values(values, range_mappings):
+def map_values(
+    values: list[int], range_mappings: list[tuple[int, int, int]]
+) -> list[int]:
     return [map_value(val, range_mappings) for val in values]
 
 
 def parse_mapping_data(lines: list[str]) -> list[tuple[int, int, int]]:
-    mapping_data = []
+    mapping_data: list[tuple[int, int, int]] = []
 
     for line in lines:
         destination_start, source_start, length = map(int, line.split())
@@ -56,9 +60,9 @@ def parse_mapping_data(lines: list[str]) -> list[tuple[int, int, int]]:
     return mapping_data
 
 
-def process_values(lines):
-    current_values = list(map(int, lines[0].split(":")[1].strip().split()))
-    mapping_lines = []
+def process_values(lines: list[str]) -> None:
+    current_values: list[int] = list(map(int, lines[0].split(":")[1].strip().split()))
+    mapping_lines: list[str] = []
     for line in lines[2:]:
         if not line:
             current_values = map_values(
@@ -71,12 +75,12 @@ def process_values(lines):
     print(int(min(current_values)))
 
 
-def process_ranges(lines):
-    seeds = list(map(int, lines[0].split(":")[1].strip().split()))
-    current_ranges = [
+def process_ranges(lines: list[str]) -> None:
+    seeds: list[int] = list(map(int, lines[0].split(":")[1].strip().split()))
+    current_ranges: list[tuple[int, int]] = [
         (start, start + length) for start, length in zip(seeds[0::2], seeds[1::2])
     ]
-    mapping_lines = []
+    mapping_lines: list[str] = []
     for line in lines[2:]:
         if not line:
             current_ranges = map_ranges(
@@ -91,7 +95,7 @@ def process_ranges(lines):
 
 if __name__ == "__main__":
     with open(INPUT_PATH) as f:
-        lines = [line.strip() for line in f.readlines()]
+        lines: list[str] = [line.strip() for line in f.readlines()]
         lines.append("")  # Add empty line to end of file
     process_values(lines)
     process_ranges(lines)

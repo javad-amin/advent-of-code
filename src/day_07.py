@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 
 PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -5,13 +7,13 @@ INPUT_PATH = os.path.join(PROJECT_PATH, "src", "input", "day_07.txt")
 
 
 class Hand:
-    def __init__(self, cards, bid, strength, joker_rule=False):
+    def __init__(self, cards: str, bid: int, strength: int, joker_rule: bool = False):
         self.cards = cards
         self.bid = bid
         self.strength = strength
         self.joker_rule = joker_rule
 
-    def card_to_number(self, card):
+    def card_to_number(self, card: str) -> int:
         if card.isdigit():
             return int(card)
         return {
@@ -22,7 +24,7 @@ class Hand:
             "A": 14,
         }[card]
 
-    def __lt__(self, other):
+    def __lt__(self, other: Hand) -> bool:
         if self.strength != other.strength:
             return self.strength < other.strength
         for card_self, card_other in zip(self.cards, other.cards):
@@ -31,10 +33,10 @@ class Hand:
         return False
 
 
-def get_counts_with_joker(hand_cards, counts):
+def get_counts_with_joker(hand_cards: str, counts: list[int]) -> list[int]:
     joker_count = hand_cards.count("J")
 
-    joker_map = {
+    joker_map: dict[int, dict] = {
         4: {"default": [5]},
         3: {(3, 2): [5], "default": [4, 1]},
         2: {(3, 2): [5], (2, 2, 1): [4, 1], "default": [3, 1, 1]},
@@ -54,7 +56,7 @@ def get_counts_with_joker(hand_cards, counts):
     return counts
 
 
-def parse_hand(line, joker_rule=False):
+def parse_hand(line: str, joker_rule: bool = False) -> Hand:
     hand_cards, hand_bid = line.split()[0], int(line.split()[1])
     counts = [hand_cards.count(card) for card in set(hand_cards)]
     counts.sort(reverse=True)
@@ -78,7 +80,7 @@ def parse_hand(line, joker_rule=False):
     raise ValueError(f"Unknown hand type: {counts}, {hand_cards=}")
 
 
-def total_winnings(lines, joker_rule=False):
+def total_winnings(lines: list[str], joker_rule: bool = False) -> None:
     hands = [parse_hand(line, joker_rule) for line in lines]
     hands.sort()
     total_winnings = sum(hand.bid * (i + 1) for i, hand in enumerate(hands))
